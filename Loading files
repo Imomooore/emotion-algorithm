@@ -1,0 +1,6 @@
+files = dir('*.mat');
+for i = 1:length(files)
+    disp(['Loading file: ', files(i).name]);
+    load(files(i).name);
+    % Now you can use the loaded data from each file as needed
+end

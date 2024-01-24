@@ -1,0 +1,32 @@
+files = dir('*.mat');
+savePath = '/Users/imogen/Desktop/world_emBODY/Images';  % Replace with the desired path
+
+if ~exist(savePath, 'dir')
+    mkdir(savePath);
+end
+
+for fileIndex = 1:length(files)
+    currentFileName = files(fileIndex).name;
+    disp(['Loading file: ', currentFileName]);
+    
+    load(currentFileName);
+
+    frames = cell(1, size(resmat, 3));
+    for i = 1:size(resmat, 3)
+        frames{i} = resmat(:, :, i);
+    end
+
+    emotionLabels = {'emotion_1', 'emotion_2', 'emotion_3', 'emotion_4', 'emotion_5', 'emotion_6', 'emotion_7', 'emotion_8', 'emotion_9', 'emotion_10', 'emotion_11', 'emotion_12', 'emotion_13', 'emotion_14'};
+
+    % Extract the file number from the loaded file name
+    fileNumber = str2double(regexp(currentFileName, '\d+', 'match'));
+
+    for i = 1:numel(frames)
+        currentFrame = frames{i};
+        currentLabel = emotionLabels{i};
+
+        % Modify the file name to include the file number as a prefix
+        fileName = fullfile(savePath, ['frame_' num2str(fileNumber) '_' num2str(i) '_' currentLabel '.png']);
+        imwrite(currentFrame, fileName);
+    end
+end
